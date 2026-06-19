@@ -2,6 +2,8 @@
   
 
 <div align="center">
+  <img src="media/libreface_logo.png" width="150px" />
+
   <h1 align="center">[FG 2026] LibreFace 2.0: A Generalizable Facial Expression Analysis Toolkit Leveraging Synthetic Data</h1>
 
 <p align="center">
@@ -14,7 +16,6 @@
     Maksim Siniukov</a>,
 <a href="https://www.linkedin.com/in/belle-hsieh/">
     Annabelle Hsieh</a>,
-
 <a href="https://scholar.google.com/citations?user=jqEgpukAAAAJ&hl=en">
     Zongjian Li</a>,
 <a href="https://people.ict.usc.edu/~soleymani/">
@@ -40,23 +41,46 @@
 
 <a href="https://ict.usc.edu/">Institute for Creative Technologies, University of Southern California</a>
 <br />
-<a href="https://arxiv.org/abs/2308.10713">Arxiv [LibreFace]</a> | <a href="https://boese0601.github.io/libreface">Project page</a>
-<br />
+
+[![arXiv](https://img.shields.io/badge/arXiv-2308.10713-b31b1b.svg)](https://arxiv.org/abs/2308.10713)
+[![Project Page](https://img.shields.io/badge/Project-Page-blue.svg)](https://boese0601.github.io/libreface)
+[![PyPI version](https://img.shields.io/pypi/v/libreface.svg)](https://pypi.org/project/libreface/)
+[![Python versions](https://img.shields.io/pypi/pyversions/libreface.svg)](https://pypi.org/project/libreface/)
+[![License](https://img.shields.io/badge/license-USC%20Research-blue.svg)](LICENSE.rst)
+[![GitHub stars](https://img.shields.io/github/stars/ihp-lab/LibreFace.svg?style=social)](https://github.com/ihp-lab/LibreFace/stargazers)
+
 </p>
 </div>
 
+## 📑 Table of Contents
 
-## Introduction
+- [Introduction](#introduction)
+- [Getting started with Python installation](#getting-started-with-python-installation)
+- [Usage](#usage)
+  - [Using commandline](#using-commandline)
+  - [Using Python script](#using-python-script)
+- [Getting Started with Derivative Tools](#getting-started-with-derivative-tools-new-20-models-available-recommended)
+- [Gaze estimation](#gaze-estimation-new-in-libreface-20)
+- [Synthetic Data for LibreFace 2.0](#synthetic-data-for-libreface-20)
+- [Training models](#training-models)
+- [Results and Accuracy](#results-and-accuracy)
+- [TODO](#todo)
+- [License](#license)
+- [Citation](#citation)
+- [Contact](#contact)
+- [Acknowledgments](#acknowledgments)
+
+## 👋 Introduction
 
 This is the official implementation of our WACV 2024 Application Track paper: LibreFace: An Open-Source Toolkit for Deep Facial Expression Analysis. The recent update (May 2026) incorporates the code and checkpoints for our FG 2026 paper "LibreFace 2.0: A Generalizable Facial Expression Analysis Toolkit Leveraging Synthetic Data". LibreFace is an open-source and comprehensive toolkit for accurate and real-time facial expression analysis with both CPU-only and GPU-acceleration versions. LibreFace eliminates the gap between cutting-edge research and an easy and free-to-use non-commercial toolbox. We propose to adaptively pre-train the vision encoders with various face datasets and then distillate them to a lightweight ResNet-18 and RepVGG models in a feature-wise matching manner. LibreFace 2.0 additionally supports gaze estimation using a MediaPipe landmark-based MLP pipeline. We conduct extensive experiments of pre-training and distillation to demonstrate that our proposed pipeline achieves comparable results to state-of-the-art works while maintaining real-time efficiency. LibreFace system supports cross-platform running, and the code is open-sourced in C# (model inference and checkpoints) and Python (model training, inference, and checkpoints).
 
 <p align="center">
-  <img src="https://github.com/ihp-lab/LibreFace/blob/main/media/System.png" width="350px" />
+  <img src="media/System.png" width="350px" />
 </p>
 
-## Getting started with Python installation
+## 🚀 Getting started with Python installation
 
-### Dependencies
+### 📦 Dependencies
 
 - Python 3.9
 - You should have `cmake` installed in your system.
@@ -64,7 +88,7 @@ This is the official implementation of our WACV 2024 Application Track paper: Li
     - **For Mac users** - `brew install cmake`.
 
 
-### Installation
+### ⚙️ Installation
 
 You can first create a new Python 3.9 environment using `conda` and then install this package using `pip` from the PyPI hub:
 
@@ -74,16 +98,20 @@ conda activate libreface_env
 pip install --upgrade libreface
 ```
 
-### Usage
+### 🛠️ Usage
 
-#### Using commandline
+#### 💻 Using commandline
 
 You can use this package through the command line using the following command.
 ```console
 libreface --input_path="path/to/your_image_or_video"
 ```
+Note that the above script would save results in a CSV at the default location - `sample_results.csv`.
 
-Note that the above script would save results in a CSV at the default location - `sample_results.csv`. If you want to specify your own path, use the `--output_path`  command line argument,
+<details>
+<summary>More commandline options (custom output path, device, batch size, examples)</summary>
+
+If you want to specify your own output path, use the `--output_path`  command line argument,
 ```console
 libreface --input_path="path/to/your_image_or_video" --output_path="path/to/save_results.csv"
 ```
@@ -119,15 +147,19 @@ libreface --input_path="sample_disfa.avi" --output_path="my_custom_file.csv" --d
 
 Note that for videos, each row in the saved CSV file corresponds to individual frames in the given video.
 
-#### Using Python script
+</details>
+
+#### 🐍 Using Python script
 
 Here’s how to use this package in your Python scripts.
 
-To assign the results to a Python variable,
 ```python
 import libreface 
 detected_attributes = libreface.get_facial_attributes(image_or_video_path)
 ```
+
+<details>
+<summary>More Python API options (save to CSV, device, temp dir, batching, custom weights dir)</summary>
 
 To save the results to a csv file, use the `output_save_path` parameter,
 ```python
@@ -168,18 +200,10 @@ libreface.get_facial_attributes(image_or_video_path,
                                 weights_download_dir = "your/directory/path")
 ```
 
-#### Gaze estimation
+</details>
 
-Gaze yaw and pitch are returned by default in the `get_facial_attributes` output (keys `gaze_yaw` and `gaze_pitch`, or columns of the same name for video).
-
-<p align="center">
-  <img src="https://github.com/ihp-lab/LibreFace/blob/libreface2/main_code/media/gaze_bias_example.png" alt="Gaze prediction example: biased (raw) vs unbiased (bias-corrected) vs ground truth on a Gaze360 frame." width="720px" />
-</p>
-
-The figure above shows a Gaze360 example with three panels: **biased (raw)** model output (red, `yaw=+11.07°, pitch=+11.43°`), **unbiased (bias-corrected)** prediction (green, `yaw=+4.51°, pitch=+6.44°`), and **ground truth** (blue, `yaw=-7.68°, pitch=+2.61°`). Bias correction subtracts the systematic offset measured on the held-out test set (`+6.55°` yaw, `+5.05°` pitch).
-
-
-If you only need gaze and want to skip AU and expression inference, call `estimate_gaze` (image) or `estimate_gaze_video` (list of aligned frames) directly. Both expect an **already aligned** face image — use `libreface.get_aligned_image` to produce one from a raw image.
+<details>
+<summary>Standalone gaze-only API (estimate_gaze / estimate_gaze_video)</summary>
 
 ```python
 import libreface
@@ -201,193 +225,103 @@ gaze_df = libreface.estimate_gaze_video(aligned_frames_path_list,
 # gaze_df has columns "gaze_yaw" and "gaze_pitch", one row per frame.
 ```
 
-## Getting Started with Derivative Tools (New 2.0 Models Available! Recommended)
+</details>
+
+## 🧩 Getting Started with Derivative Tools (New 2.0 Models Available! Recommended)
 
 We offer several derivative tools on the .NET platform to facilitate easier integration of LibreFace into various systems, in addition to pytorch code. These works are based on ONNX platform weights exported from the model weights of this project.
 
 <p align="center">
-  <img src="https://github.com/ihp-lab/LibreFace/blob/main/media/software.png" />
+  <img src="media/software.png" />
 </p>
 
 + NuGet Package: We have released a [NuGet Package named `LibreFace`](https://www.nuget.org/packages/LibreFace). This NuGet Package contains the ONNX weight files, and its source code is located in [this directory of the OpenSense repository](https://github.com/ihp-lab/OpenSense/tree/master/Utilities/LibreFace). For how to integrate it, you can refer to the documentation that comes with the Package or the source code of the OpenSense Component below. This Package is cross-platform compatible and is recommended to be used with an ONNX Runtime Execution Provider with acceleration features. For non-.NET developers, you can access the ONNX weight files inside the package by changing the extension from `.nupkg` to `.zip`.
 
 + OpenSense Component: We have also wrapped LibreFace into a component available in OpenSense. With this work, other components in OpenSense can be used in conjunction with LibreFace in Zero-Code setup for real-time or non-real-time inference. Its source code is mainly stored in [this directory of the OpenSense repository](https://github.com/ihp-lab/OpenSense/tree/master/Components/LibreFace). Running this component by default requires CUDA support, but other ONNX Providers can be used when compiling from the source code. A OpenSense Pipeline we were using for testing can be used as an example and can be downloaded from [here](https://github.com/ihp-lab/OpenSense/releases/download/3.2.0/20230825__LibreFace__Injector__AzureKinect.pipe.json). Please set the camera you want to use before running it.
 
-+ Command Line Tool: For the common scenario of analyzing videos and exporting results to text files, we have created a dedicated command-line tool for batch processing of video files. This tool can be downloaded as a compiled program from [the OpenSense release Google Drive directory](https://drive.google.com/drive/folders/1rYypeKELnva0-MGQvNJ45cgsrgjfowHw?usp=sharing). Please select a Zip file having `LibreFace Console Application` in its name to download. Its executable is called `LibreFace.App.Consoles.exe`, please run it in a command line environment as it is a command line application. The source code can be found in [this directory of the OpenSense repository](https://github.com/ihp-lab/OpenSense/tree/master/Derivatives/LibreFace.App.Consoles). It takes video files as input, and outputs one JSON file per video containing individual results of frames. For specific usage methods and running environment requirements, please refer to the documentation built into the tool. Currently, it only supports Windows and CUDA is mandatory. We are adding functionality to batch process images, and potentially adding support for other operating systems.
+<details>
+<summary>+ Command Line Tool</summary>
+
+For the common scenario of analyzing videos and exporting results to text files, we have created a dedicated command-line tool for batch processing of video files. This tool can be downloaded as a compiled program from [the OpenSense release Google Drive directory](https://drive.google.com/drive/folders/1rYypeKELnva0-MGQvNJ45cgsrgjfowHw?usp=sharing). Please select a Zip file having `LibreFace Console Application` in its name to download. Its executable is called `LibreFace.App.Consoles.exe`, please run it in a command line environment as it is a command line application. The source code can be found in [this directory of the OpenSense repository](https://github.com/ihp-lab/OpenSense/tree/master/Derivatives/LibreFace.App.Consoles). It takes video files as input, and outputs one JSON file per video containing individual results of frames. For specific usage methods and running environment requirements, please refer to the documentation built into the tool. Currently, it only supports Windows and CUDA is mandatory. We are adding functionality to batch process images, and potentially adding support for other operating systems.
 
 <p align="center">
-  <img src="https://github.com/ihp-lab/LibreFace/blob/main/media/ConsoleApplication.png" alt="A screenshot of LibreFace Console Application, showing it built-in documentation." width="480px" />
+  <img src="media/ConsoleApplication.png" alt="A screenshot of LibreFace Console Application, showing it built-in documentation." width="480px" />
 </p>
-  
-## Training models using Python
 
-Clone repo:
+</details>
 
-```
-git clone https://github.com/ihp-lab/LibreFace.git
-cd LibreFace
-```
+## 👀 Gaze estimation (new in LibreFace 2.0)
 
-The code is tested with Python == 3.7, PyTorch == 1.10.1 and CUDA == 11.3 on NVIDIA GeForce RTX 3090. We recommend you to use [anaconda](https://www.anaconda.com/) to manage dependencies. You may need to change the torch and cuda version in the `requirements.txt` according to your computer.
+Gaze yaw and pitch are returned by default in the `get_facial_attributes` output (keys `gaze_yaw` and `gaze_pitch`, or columns of the same name for video).
 
-```
-conda create -n libreface python=3.7
-conda install pytorch==1.10.0 torchvision==0.11.0 torchaudio==0.10.0 cudatoolkit=11.3 -c pytorch -c conda-forge
-conda activate libreface
-pip install -r requirements.txt
-```
+<p align="center">
+  <img src="media/gaze_bias_example.png" alt="Gaze prediction example: biased (raw) vs unbiased (bias-corrected) vs ground truth on a Gaze360 frame." width="720px" />
+</p>
 
-### Facial Landmark/Mesh Detection and Alignment
+The figure above shows a Gaze360 example with three panels: **biased (raw)** model output (red, `yaw=+11.07°, pitch=+11.43°`), **unbiased (bias-corrected)** prediction (green, `yaw=+4.51°, pitch=+6.44°`), and **ground truth** (blue, `yaw=-7.68°, pitch=+2.61°`). Bias correction subtracts the systematic offset measured on the held-out test set (`+6.55°` yaw, `+5.05°` pitch).
 
-As described in our paper, we first pre-process the input image by mediapipe to obatain facial landmark and mesh. The detected landmark are used to calculate the corresponding positions of the eyes and mouth in the image. We finally use these positions to align the images and center the face area.
 
-To process the image, simpy run following commad:
+If you only need gaze and want to skip AU and expression inference, call `estimate_gaze` (image) or `estimate_gaze_video` (list of aligned frames) directly. Both expect an **already aligned** face image — use `libreface.get_aligned_image` to produce one from a raw image.
 
-```jsx
-python detect_mediapipe.py
-```
+## 🧬 Synthetic Data for LibreFace 2.0
 
-### AU Intensity Estimation
+Real AU datasets like DISFA and BP4D lack demographic diversity, so LibreFace 2.0 augments training with synthetic data: **Stable Diffusion 3.5** generates diverse identities (age, gender, race), and **[LivePortrait](https://github.com/KwaiVGI/LivePortrait)** retargets real AU motion from DISFA/BP4D driving videos onto them. This yielded **240,000+ synthetic frames across 708 identities**, mixed with real data during training to drive the fairness gains seen on RAF-AU and AffWild2.
 
-#### DISFA
+<p align="center">
+  <img src="media/data_sample_grid_libreface.png" alt="Grid of real driving frames alongside synthetically generated identities reproducing the same AU motion, spanning diverse ages, genders, and races." width="640px" />
+</p>
 
-Download the [DISFA](http://mohammadmahoor.com/disfa/) dataset from the official website here. Please be reminded that the original format of the dataset are video sequences, you need to manually process them into image frames.
+## 🏋️ Training models
 
-Download the original video provided by DISFA. Extract it and put it under the folder `data/DISFA`.
+LibreFace's underlying AU intensity, AU detection, and facial expression recognition
+models can be trained from scratch in Python — dataset preparation, per-task
+training/inference commands, and config flags are documented in
+**[TRAINING.md](TRAINING.md)**.
 
-Preprocess the images by previous mediapipe script and you should get a dataset folder like below:
-
-```
-data
-├── DISFA
-│ ├── images
-│ ├── landmarks
-│ └── aligned_images
-├── BP4D
-├── AffectNet
-└── RAF-DB
-```
-
-#### Training/Inference
-
-```
-cd AU_Recognition
-bash train.sh
-bash inference.sh
-```
-
-### AU Detection
-
-#### BP4D
-
-Download the [BP4D](https://www.cs.binghamton.edu/~lijun/Research/3DFE/3DFE_Analysis.html) dataset from the official website. Extract it and put it under the folder `data/BP4D`.
-
-Preprocess the images by previous mediapipe script and you should get a dataset folder like below:
-
-```
-data
-├── DISFA
-│ ├── images
-│ ├── landmarks
-│ └── aligned_images
-├── BP4D
-│ ├── images
-│ ├── landmarks
-│ └── aligned_images
-├── AffectNet
-└── RAF-DB
-```
-
-#### Training/Inference
-
-```
-cd AU_Detection
-bash train.sh
-bash inference.sh
-```
-
-### Facial Expression Recognition
-
-#### AffectNet
-
-Download the [AffectNet](http://mohammadmahoor.com/affectnet/) dataset from the official website. Extract it and put it under the folder `data/AffectNet`.
-
-Preprocess the images by previous mediapipe script and you should get a dataset folder like below:
-
-```
-data
-├── DISFA
-│ ├── images
-│ ├── landmarks
-│ └── aligned_images
-├── BP4D
-│ ├── images
-│ ├── landmarks
-│ └── aligned_images
-├── AffectNet
-│ ├── images
-│ ├── landmarks
-│ └── aligned_images
-└── RAF-DB
-```
-
-#### Training/Inference
-
-```
-cd Facial_Expression_Recognition
-bash train.sh
-bash inference.sh
-```
-
-### Configure
-
-There are several options of flags at the beginning of each train/inference files. Several key options are explained below. Other options are self-explanatory in the codes. Before running our codes, you may need to change the `device`, `data_root` , `ckpt_path` , `data` and `fold`.
-
-- `ckpt_path` A relative or absolute folder path for writing checkpoints.
-- `data_root` The path to your dataset on your local machine.
-- `device` Specify cuda or cpu. 
-- `data` Dataset to be used. [“DSIFA”,“BP4D”,"AffectNet","RAF-DB"]
-- `fold` We use five-fold cross-validation to report performance on DISFA and three-fold cross-validation on BP4D. ["0","1","2","3","4"]
-- `train_csv` Training csv file to be parsed. 
-- `test_csv` Testing csv file to be parsed. 
-- `fm_distillation` Use feature matching distillation for training. 
-
-## Results and Accuracy
+## 📊 Results and Accuracy
 
 We performed a variety of evaluations across several demographic axes to observe how our model performs on different groups of people.
 
-### FACES Accuracy
+### 📈 AU Intensity Estimation
+
+Average Pearson Correlation Coefficient (PCC) across the 12 AUs of DISFA (5-fold cross-validation), comparing LibreFace 2.0 against prior open-source and academic baselines.
+<p align="center">
+  <img src="media/auIntensityAvgPCC.png" alt="AU Intensity Estimation Average PCC on DISFA" width="600px" />
+</p>
+
+### ⚖️ AU Detection Fairness on AffWild2
+
+Beyond raw accuracy, LibreFace 2.0 narrows the performance gap across demographic groups. On [AffWild2](https://ibug.doc.ic.ac.uk/resources/aff-wild2/), it achieves both the highest F1 and the **lowest standard deviation across gender and racial groups**, indicating more consistent, fairer AU detection across subpopulations than OpenFace 2.0 or LibreFace 1.0.
+<p align="center">
+  <img src="media/affwild2Fairness.png" alt="AU Detection Fairness Comparison on AffWild2" width="800px" />
+</p>
+
+<details>
+<summary>FACES and CAFE demographic accuracy (facial expression recognition)</summary>
+
+#### 👵 FACES Accuracy
 
 This is the accuracy of the model when performing on the [FACES](https://faces.mpdl.mpg.de/imeji/) dataset, filtered to only include images in the dataset that were deemed correctly labelled by a majority of human raters. This dataset features a variety of ages, and the evaluation particularly denotes the model's performance on elderly people.
 <p align="center">
-  <img src="https://github.com/ihp-lab/LibreFace/blob/main/media/facesAccuracy.JPG" alt="Faces Accuracy Results" width="480px" />
+  <img src="media/facesAccuracy.JPG" alt="Faces Accuracy Results" width="480px" />
 </p>
 
-### CAFE Accuracy
+#### 🧒 CAFE Accuracy
 This is the accuracy of the model when performing on the [CAFE](https://nyu.databrary.org/volume/30) dataset. This dataset features faces of children across a variety of racial groups. The children in the CAFE dataset are notably younger than those in the FACES dataset, denoting the model's performance on ages 32.5 mos–8.7 yrs and across differnt racial groups. AA = African American, AS = Asian, EA = European American, LA = Latino, PI = Pacific Islander, SA = South Asian
 
 The two columns at the bottom compare human raters on this entire dataset against the performance of our model across each emotion.
 <p align="center">
-  <img src="https://github.com/ihp-lab/LibreFace/blob/main/media/cafeAccuracy.JPG" alt="Cafe Accuracy Results" width="480px" />
+  <img src="media/cafeAccuracy.JPG" alt="Cafe Accuracy Results" width="480px" />
 </p>
 
-## TODO:
-Package
-- [ ] Optimize facial alignment using mediapipe face aligner.
-- [ ] Add option for the user to choose which model to run.
-- [ ] Add multiple file inference by passing a list.
-- [x] Add batch inference for video files.
-- [x] Release pip package.
+</details>
 
-Validation
-- [ ]  Upload Training/Validation Split csv files and CSV creation python code for model training
-- [ ]  Upload Facial Expression Recognition code on RAF-DB Dataset
 
-## License
+## 📄 License
 
 Our code is distributed under the USC research license. See `LICENSE.txt` file for more information.
 
-## Citation
+## 📚 Citation
 
 ```
 @inproceedings{chang2023libreface,
@@ -395,18 +329,24 @@ Our code is distributed under the USC research license. See `LICENSE.txt` file f
       author={Di Chang and Yufeng Yin and Zongjian Li and Minh Tran and Mohammad Soleymani},
       year={2024},
       booktitle = {Proceedings of the IEEE/CVF Winter Conference on Applications of Computer Vision (WACV)},
-      month     = {January},
-      note = {To appear}}
+      month     = {January}}
 ```
 
-## Contact
+<!-- TODO: update year/booktitle/note once final FG 2026 publication details are available -->
+```
+@inproceedings{guan2026libreface2,
+      title={LibreFace 2.0: A Generalizable Facial Expression Analysis Toolkit Leveraging Synthetic Data},
+      author={Xulang Guan and Ashutosh Chaubey and Maksim Siniukov and Annabelle Hsieh and Zongjian Li and Mohammad Soleymani},
+      year={2026},
+      booktitle = {Proceedings of the IEEE International Conference on Automatic Face and Gesture Recognition (FG)}}
+```
 
-If you have any questions, please raise an issue or email to Di Chang (`dchang@ict.usc.edu`or `dichang@usc.edu`). For issues related to the python package, write to Ashutosh Chaubey (`achaubey@usc.edu` or `achaubey@ict.usc.edu`).
+## 📬 Contact
 
-## Acknowledgments
+If you have any questions, please raise an issue or email Ashutosh Chaubey (`achaubey@usc.edu`) or Mohammad Soleymani (`soleymani@ict.usc.edu`).
 
-Our code follows several awesome repositories. We appreciate them for making their codes available to public.
+## 🙏 Acknowledgments
 
-- [KD_SRRL](https://github.com/jingyang2017/KD_SRRL)
-- [XNorm](https://github.com/ihp-lab/XNorm)
-- This work is sponsored by the U.S. Army Research Laboratory (ARL) under contract number W911NF-14-D-0005. The content of the information does not necessarily reflect the position or the policy of the Government, and no official endorsement should be inferred.
+Our code follows several awesome repositories, [KD_SRRL](https://github.com/jingyang2017/KD_SRRL), [XNorm](https://github.com/ihp-lab/XNorm), and [LivePortrait](https://github.com/KwaiVGI/LivePortrait). We appreciate them for making their codes available to public.
+
+This work is sponsored by the U.S. Army Research Laboratory (ARL) under contract number W911NF-14-D-0005. The content of the information does not necessarily reflect the position or the policy of the Government, and no official endorsement should be inferred.

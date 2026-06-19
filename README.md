@@ -42,8 +42,9 @@
 <a href="https://ict.usc.edu/">Institute for Creative Technologies, University of Southern California</a>
 <br />
 
-[![arXiv](https://img.shields.io/badge/arXiv-2308.10713-b31b1b.svg)](https://arxiv.org/abs/2308.10713)
-[![Project Page](https://img.shields.io/badge/Project-Page-blue.svg)](https://boese0601.github.io/libreface)
+[![Paper](https://img.shields.io/badge/Paper-LibreFace2-b31b1b.svg)](https://ieeexplore.ieee.org/document/11556988)
+[![Paper](https://img.shields.io/badge/Paper-LibreFace-b31b1b.svg)](https://arxiv.org/abs/2308.10713)
+[![Project Page](https://img.shields.io/badge/Project-Page-blue.svg)](https://libreface.github.io/)
 [![PyPI version](https://img.shields.io/pypi/v/libreface.svg)](https://pypi.org/project/libreface/)
 [![Python versions](https://img.shields.io/pypi/pyversions/libreface.svg)](https://pypi.org/project/libreface/)
 [![License](https://img.shields.io/badge/license-USC%20Research-blue.svg)](LICENSE.rst)
@@ -323,22 +324,31 @@ Our code is distributed under the USC research license. See `LICENSE.txt` file f
 
 ## 📚 Citation
 
+If you use LibreFace, make sure to cite both of our works below:
+
 ```
-@inproceedings{chang2023libreface,
-      title={LibreFace: An Open-Source Toolkit for Deep Facial Expression Analysis}, 
-      author={Di Chang and Yufeng Yin and Zongjian Li and Minh Tran and Mohammad Soleymani},
-      year={2024},
-      booktitle = {Proceedings of the IEEE/CVF Winter Conference on Applications of Computer Vision (WACV)},
-      month     = {January}}
+@InProceedings{Chang_2024_WACV,
+    author    = {Chang, Di and Yin, Yufeng and Li, Zongjian and Tran, Minh and Soleymani, Mohammad},
+    title     = {LibreFace: An Open-Source Toolkit for Deep Facial Expression Analysis},
+    booktitle = {Proceedings of the IEEE/CVF Winter Conference on Applications of Computer Vision (WACV)},
+    month     = {January},
+    year      = {2024},
+    pages     = {8205-8215}
+}
 ```
 
 <!-- TODO: update year/booktitle/note once final FG 2026 publication details are available -->
 ```
-@inproceedings{guan2026libreface2,
-      title={LibreFace 2.0: A Generalizable Facial Expression Analysis Toolkit Leveraging Synthetic Data},
-      author={Xulang Guan and Ashutosh Chaubey and Maksim Siniukov and Annabelle Hsieh and Zongjian Li and Mohammad Soleymani},
-      year={2026},
-      booktitle = {Proceedings of the IEEE International Conference on Automatic Face and Gesture Recognition (FG)}}
+@INPROCEEDINGS{11556988,
+  author={Guan, Xulang and Chaubey, Ashutosh and Siniukov, Maksim and Hsieh, Annabelle and Li, Zongjian and Soleymani, Mohammad},
+  booktitle={2026 IEEE 20th International Conference on Automatic Face and Gesture Recognition (FG)},
+  title={LibreFace 2.0: A Generalizable Facial Expression Analysis Toolkit Leveraging Synthetic Data},
+  year={2026},
+  volume={},
+  number={},
+  pages={1-10},
+  keywords={Modeling;Printing;Facial expressions;Aging;Conferences;Signal detection;Action units;Training;Computers;Faces},
+  doi={10.1109/FG67764.2026.11556988}}
 ```
 
 ## 📬 Contact
